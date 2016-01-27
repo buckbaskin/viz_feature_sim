@@ -1,6 +1,17 @@
 #!/usr/bin/env python
 
+'''
+Implement a ROS node that simulates using a 360 degree camera to identify unique
+features and patterns in the surrounding environment and track their bearing
+from the camera. The simulator works at a level below the camera, and publishes
+the bearings and colors.
+
+It is currently just publishing the exact measurement and color.
+'''
+
 import rospy
+import math
+
 from nav_msgs.msg import Odometry
 from viz_feature_sim.msg import Observation
 
@@ -11,36 +22,47 @@ from tf import transformations as tft
 Feature = namedtuple('Feature', 'x y size red green blue frame')
 
 def quaternion_to_heading(quat):
+    '''
+    Convert a quaternion to a yaw-heading
+    '''
     try:
-        quat = [quaternion.x, quaternion.y, quaternion.z, quaternion.w]
-    except AttriubteError:
-        quat = quaternion
+        quat = [quat.x, quat.y, quat.z, quat.w]
+    except AttributeError:
+        quat = quat
     yaw = tft.euler_from_quaternion(quat)[2]
     return yaw
 
 def easy_feature(x, y, size=.2, color=None):
+    '''
+    helper method to create features to use as navigation references
+    '''
     # red, green, blue = color
     if color is None:
         color = (random_double(), random_double(), random_double())
-    return Feature(x, y, size, *color, '/map')
+    red, green, blue = color
+    return Feature(x, y, size, red, green, blue, frame='/map')
 
 def easy_observation(odom, feature):
-    o = Observation()
-    o.header.stamp = odom.header
-    heading = math.atan2(odom.pose.pose.position.y-feature.y, odom.pose.pose.position.x-feature.x)
-    o.bearing = heading - quaternion_to_heading(odom.pose.pose.orientation)
-    o.color = feature.color
-    return o
+    '''
+    helper method to create Observations to use in navigation calculations
+    '''
+    observ = Observation()
+    observ.header.stamp = odom.header
+    heading = math.atan2(odom.pose.pose.position.y-feature.y,
+        odom.pose.pose.position.x-feature.x)
+    observ.bearing = heading - quaternion_to_heading(odom.pose.pose.orientation)
+    observ.color = feature.color
+    return observ
 
 class CamSim(object):
     def __init__(self):
         rospy.init_node('CamSim')
         self.feature_list = []
-        self.feature_list.append(0,0)
-        self.feature_list.append(0,10)
-        self.feature_list.append(10,0)
-        self.feature_list.append(10,10)
-        self.true_pose = rospy.Subscriber('/base_pose_ground_truth', Odometry, 
+        self.feature_list.append(0, 0)
+        self.feature_list.append(0, 10)
+        self.feature_list.append(10, 0)
+        self.feature_list.append(10, 10)
+        self.true_pose = rospy.Subscriber('/base_pose_ground_truth', Odometry,
             self.process_position)
         self.feature_pub = rospy.Publisher('/camera/features', Observation)
 
