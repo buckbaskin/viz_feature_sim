@@ -58,13 +58,15 @@ class CamSim(object):
     def __init__(self):
         rospy.init_node('CamSim')
         self.feature_list = []
-        self.feature_list.append(0, 0)
-        self.feature_list.append(0, 10)
-        self.feature_list.append(10, 0)
-        self.feature_list.append(10, 10)
+        self.feature_list.append(easy_feature(0, 0))
+        self.feature_list.append(easy_feature(0, 10))
+        self.feature_list.append(easy_feature(10, 0))
+        self.feature_list.append(easy_feature(10, 10))
         self.true_pose = rospy.Subscriber('/base_pose_ground_truth', Odometry,
             self.process_position)
-        self.feature_pub = rospy.Publisher('/camera/features', Observation)
+        self.feature_pub = rospy.Publisher('/camera/features', Observation, queue_size=10)
+        rospy.loginfo('CamSim aka viz_core aka viz_feature_sim ready')
+        rospy.spin()
 
     def process_position(self, odom):
         odom.header.frame_id = '/map'
