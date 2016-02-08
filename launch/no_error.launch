@@ -1,12 +1,12 @@
 <launch>
 
   <!-- Launch stage with the specified world file-->
-  <node pkg="stage_ros" type="stageros" name="stage" args="$(find viz_feature_sim)/world/triple_i.world"/>
+  <node pkg="stage_ros" type="stageros" name="stage" args="$(find viz_feature_sim)/world/basic.world"/>
 
   <!-- Launch rviz -->
   <node pkg="rviz" type="rviz" name="rviz" args="-d $(find viz_feature_sim)/config/sim.rviz"/>
 
   <!-- Launch the visual information simulator -->
-  <node pkg="viz_feature_sim" type="viz_core.py" name="Viz Core Sim"/>
+  <node pkg="viz_feature_sim" type="viz_core.py" name="Viz_Core_Sim"/>
 
 </launch>
