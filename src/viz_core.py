@@ -55,6 +55,10 @@ def easy_observation(odom, feature):
     return observ
 
 class CamSim(object):
+    '''
+    CamSim is the python class that is created to simulate visual features in
+     the simulator
+    '''
     def __init__(self):
         rospy.init_node('CamSim')
         self.feature_list = []
@@ -64,12 +68,17 @@ class CamSim(object):
         self.feature_list.append(easy_feature(10, 10))
         self.true_pose = rospy.Subscriber('/base_pose_ground_truth', Odometry,
             self.process_position)
-        self.feature_pub = rospy.Publisher('/camera/features', Observation, queue_size=10)
+        self.feature_pub = rospy.Publisher('/camera/features', Observation,
+            queue_size=10)
         rospy.loginfo('CamSim aka viz_core aka viz_feature_sim ready')
         rospy.spin()
 
     def process_position(self, odom):
-        odom.header.frame_id = '/map'
+        '''
+        ros callback for the position that publishes new sensor data for that
+         position
+        '''
+        # odom.header.frame_id = '/map'
         for feature in self.feature_list:
             self.feature_pub.publish(easy_observation(odom, feature))
 
