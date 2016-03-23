@@ -51,7 +51,8 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate messages in the 'msg' folder
 add_message_files(
   FILES
-  Observation.msg
+  Blob.msg
+  VizScan.msg
 )
 
 ## Generate services in the 'srv' folder
@@ -72,6 +73,7 @@ add_message_files(
 generate_messages(
   DEPENDENCIES
   std_msgs
+  viz_feature_sim
 )
 
 ################################################
@@ -106,7 +108,7 @@ generate_messages(
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES viz_feature_sim
-   CATKIN_DEPENDS geometry_msgs message_generation nav_msgs roscpp rospy std_msgs std_srvs tf
+   CATKIN_DEPENDS message_runtime geometry_msgs nav_msgs roscpp rospy std_msgs std_srvs tf
 #  DEPENDS system_lib
 )
 
