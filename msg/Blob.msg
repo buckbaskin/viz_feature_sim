@@ -1,4 +1,4 @@
-std_msgs/Float64 bearing
-std_msgs/Float64 size
+float64 bearing
+float64 size
 std_msgs/ColorRGBA color
 
