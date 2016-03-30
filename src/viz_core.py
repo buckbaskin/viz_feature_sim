@@ -15,7 +15,7 @@ import random
 random.seed('This is a long string, but it is hashable')
 
 from nav_msgs.msg import Odometry
-from viz_feature_sim.msg import Observation
+from viz_feature_sim.msg import Blob, VizScan
 
 from collections import namedtuple
 from random import random as random_double
@@ -46,15 +46,16 @@ def easy_feature(x, y, size=.2, color=None):
 
 def easy_observation(odom, feature):
     '''
-    helper method to create Observations to use in navigation calculations
+    helper method to create Blobs to use in navigation calculations
     '''
-    observ = Observation()
-    observ.header.stamp = odom.header
+    blob = Blob()
     heading = math.atan2(odom.pose.pose.position.y-feature.y,
         odom.pose.pose.position.x-feature.x)
-    observ.bearing = heading - quaternion_to_heading(odom.pose.pose.orientation)
-    observ.color = feature.color
-    return observ
+    blob.bearing = heading - quaternion_to_heading(odom.pose.pose.orientation)
+    blob.color.r = feature.red
+    blob.color.g = feature.green
+    blob.color.b = feature.blue
+    return blob
 
 class CamSim(object):
     '''
@@ -76,7 +77,7 @@ class CamSim(object):
 
         self.true_pose = rospy.Subscriber('/base_pose_ground_truth', Odometry,
             self.process_position)
-        self.feature_pub = rospy.Publisher('/camera/features', Observation,
+        self.feature_pub = rospy.Publisher('/camera/features', VizScan,
             queue_size=10)
         rospy.loginfo('CamSim aka viz_core aka viz_feature_sim ready')
         rospy.spin()
@@ -86,9 +87,18 @@ class CamSim(object):
         ros callback for the position that publishes new sensor data for that
          position
         '''
+
+        vs = VizScan()
+        vs.header = odom.header
+        vs.observes = []
+
         # odom.header.frame_id = '/map'
         for feature in self.feature_list:
-            self.feature_pub.publish(easy_observation(odom, feature))
+            vs.observes.append(easy_observation(odom, feature))
+
+        self.feature_pub.publish(vs)
+
+
 
 
 if __name__ == '__main__':
