@@ -66,13 +66,13 @@ class CamSim(object):
         rospy.init_node('CamSim')
         self.num_features = 20
         self.feature_list = []
-        self.feature_list.append(easy_feature(0, 0, color=(161,77,137,)))
-        self.feature_list.append(easy_feature(0, 15, color=(75,55,230,)))
-        self.feature_list.append(easy_feature(10, 0, color=(82,120,68,)))
-        self.feature_list.append(easy_feature(10, 15, color=(224,37,192,)))
+        self.feature_list.append(easy_feature(0, 0, color=(161, 77, 137,)))
+        self.feature_list.append(easy_feature(0, 15, color=(75, 55, 230,)))
+        self.feature_list.append(easy_feature(10, 0, color=(82, 120, 68,)))
+        self.feature_list.append(easy_feature(10, 15, color=(224, 37, 192,)))
         while(len(self.feature_list)) < self.num_features:
-            x = random.randint(-20,35)
-            y = random.randint(-20,35)
+            x = random.randint(-20, 35)
+            y = random.randint(-20, 35)
             self.feature_list.append(easy_feature(x, y))
 
         self.true_pose = rospy.Subscriber('/base_pose_ground_truth', Odometry,
@@ -80,6 +80,8 @@ class CamSim(object):
         self.feature_pub = rospy.Publisher('/camera/features', VizScan,
             queue_size=10)
         rospy.loginfo('CamSim aka viz_core aka viz_feature_sim ready')
+
+    def run(self):
         rospy.spin()
 
     def process_position(self, odom):
@@ -102,4 +104,5 @@ class CamSim(object):
 
 
 if __name__ == '__main__':
-    CamSim()
+    cs = CamSim()
+    cs.run()
