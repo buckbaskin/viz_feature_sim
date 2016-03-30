@@ -60,4 +60,4 @@ window
 )
 
 # throw in a robot
-mobile_robot( pose [ 2.0 2.0 0.0 90.0 ] name "era" color "blue")
+mobile_robot( pose [ 0.0 1.0 0.0 90.0 ] name "era" color "blue")

@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   std_srvs
   tf
+  visualization_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -108,7 +109,7 @@ generate_messages(
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES viz_feature_sim
-   CATKIN_DEPENDS message_runtime geometry_msgs nav_msgs roscpp rospy std_msgs std_srvs tf
+   CATKIN_DEPENDS message_runtime geometry_msgs nav_msgs roscpp rospy std_msgs std_srvs tf visualization_msgs
 #  DEPENDS system_lib
 )
 

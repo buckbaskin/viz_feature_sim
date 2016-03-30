@@ -64,7 +64,7 @@ class CamSim(object):
     '''
     def __init__(self):
         rospy.init_node('CamSim')
-        self.num_features = 20
+        self.num_features = 5
         self.feature_list = []
         self.feature_list.append(easy_feature(0, 0, color=(161, 77, 137,)))
         self.feature_list.append(easy_feature(0, 15, color=(75, 55, 230,)))

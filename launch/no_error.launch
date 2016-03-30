@@ -1,5 +1,8 @@
 <launch>
 
+  <!-- Create a static transfrom from map to odom. In the future this will be updated by the localization node. -->
+  <node pkg="tf2_ros" type="static_transform_publisher" name="map_to_odom" args="0 0 0 0.0 0 0 map odom"/>
+
   <!-- Launch stage with the specified world file-->
   <node pkg="stage_ros" type="stageros" name="stage" args="$(find viz_feature_sim)/world/basic.world"/>
 
