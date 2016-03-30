@@ -11,6 +11,8 @@ It is currently just publishing the exact measurement and color.
 
 import rospy
 import math
+import random
+random.seed('This is a long string, but it is hashable')
 
 from nav_msgs.msg import Odometry
 from viz_feature_sim.msg import Observation
@@ -61,11 +63,17 @@ class CamSim(object):
     '''
     def __init__(self):
         rospy.init_node('CamSim')
+        self.num_features = 20
         self.feature_list = []
-        self.feature_list.append(easy_feature(0, 0))
-        self.feature_list.append(easy_feature(0, 10))
-        self.feature_list.append(easy_feature(10, 0))
-        self.feature_list.append(easy_feature(10, 10))
+        self.feature_list.append(easy_feature(0, 0, color=(161,77,137,)))
+        self.feature_list.append(easy_feature(0, 15, color=(75,55,230,)))
+        self.feature_list.append(easy_feature(10, 0, color=(82,120,68,)))
+        self.feature_list.append(easy_feature(10, 15, color=(224,37,192,)))
+        while(len(self.feature_list)) < self.num_features:
+            x = random.randint(-20,35)
+            y = random.randint(-20,35)
+            self.feature_list.append(easy_feature(x, y))
+
         self.true_pose = rospy.Subscriber('/base_pose_ground_truth', Odometry,
             self.process_position)
         self.feature_pub = rospy.Publisher('/camera/features', Observation,
