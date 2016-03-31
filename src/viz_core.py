@@ -80,6 +80,7 @@ class CamSim(object):
         self.feature_pub = rospy.Publisher('/camera/features', VizScan,
             queue_size=10)
         rospy.loginfo('CamSim aka viz_core aka viz_feature_sim ready')
+        self.rateLimit = rospy.Rate(10)
 
     def run(self):
         rospy.spin()
@@ -98,7 +99,9 @@ class CamSim(object):
         for feature in self.feature_list:
             vs.observes.append(easy_observation(odom, feature))
 
+        rospy.loginfo('viz_core publish sensor data')
         self.feature_pub.publish(vs)
+        self.rateLimit.sleep()
 
 
 
