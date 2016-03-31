@@ -6,6 +6,7 @@ Panels:
       Expanded:
         - /Grid1/Offset1
         - /TF1/Frames1
+        - /GroundTruth1
         - /sim odom1
         - /aged1
         - /resampled1
@@ -96,14 +97,14 @@ Visualization Manager:
       Value: false
     - Angle Tolerance: 0.1
       Class: rviz/Odometry
-      Color: 255; 25; 0
-      Enabled: false
-      Keep: 1000
+      Color: 255; 0; 127
+      Enabled: true
+      Keep: 1
       Length: 1
       Name: GroundTruth
       Position Tolerance: 0.1
       Topic: /base_pose_ground_truth
-      Value: false
+      Value: true
     - Angle Tolerance: 0.1
       Class: rviz/Odometry
       Color: 8; 12; 255
@@ -147,13 +148,13 @@ Visualization Manager:
     - Angle Tolerance: 0.001
       Class: rviz/Odometry
       Color: 170; 255; 0
-      Enabled: false
+      Enabled: true
       Keep: 1
       Length: 1
       Name: slam
       Position Tolerance: 0.001
       Topic: /slam_estimate
-      Value: false
+      Value: true
     - Angle Tolerance: 0.001
       Class: rviz/Odometry
       Color: 255; 25; 0
@@ -168,8 +169,8 @@ Visualization Manager:
       Class: rviz/Odometry
       Color: 125; 125; 125
       Enabled: true
-      Keep: 100
-      Length: 1
+      Keep: 500
+      Length: 0.6
       Name: aged
       Position Tolerance: 0.001
       Topic: /aged_particles
@@ -178,8 +179,8 @@ Visualization Manager:
       Class: rviz/Odometry
       Color: 85; 255; 0
       Enabled: true
-      Keep: 100
-      Length: 1
+      Keep: 10
+      Length: 0.6
       Name: resampled
       Position Tolerance: 0.001
       Topic: /resampled_particles
@@ -207,7 +208,7 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Angle: -0.999999
+      Angle: 0.320001
       Class: rviz/TopDownOrtho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
@@ -216,11 +217,11 @@ Visualization Manager:
         Value: false
       Name: Current View
       Near Clip Distance: 0.01
-      Scale: 65.6344
+      Scale: 114.919
       Target Frame: <Fixed Frame>
       Value: TopDownOrtho (rviz)
-      X: 2.47267
-      Y: 0.0951464
+      X: 3.19987
+      Y: 2.56653
     Saved: ~
 Window Geometry:
   Displays:
