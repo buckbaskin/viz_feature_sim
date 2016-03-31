@@ -48,7 +48,7 @@ define floorplan model
 # set the resolution of the underlying raytrace model in meters
 resolution 0.02
 
-interval_sim 1  # simulation timestep in milliseconds
+interval_sim 16  # simulation timestep in milliseconds
 
 
 window
@@ -60,4 +60,4 @@ window
 )
 
 # throw in a robot
-mobile_robot( pose [ 0.0 0.0 0.0 0.0 ] name "era" color "blue")
+mobile_robot( pose [ 0.1 0.0 0.0 0.0 ] name "era" color "blue")

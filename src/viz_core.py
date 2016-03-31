@@ -40,7 +40,7 @@ def easy_feature(x, y, size=.2, color=None):
     '''
     # red, green, blue = color
     if color is None:
-        color = (random_double(), random_double(), random_double())
+        color = (random_double()*255, random_double()*255, random_double()*255)
     red, green, blue = color
     return Feature(x, y, size, red, green, blue, frame='/map')
 
@@ -52,6 +52,7 @@ def easy_observation(odom, feature):
     heading = math.atan2(odom.pose.pose.position.y-feature.y,
         odom.pose.pose.position.x-feature.x)
     blob.bearing = heading - quaternion_to_heading(odom.pose.pose.orientation)
+    blob.size = feature.red
     blob.color.r = feature.red
     blob.color.g = feature.green
     blob.color.b = feature.blue
