@@ -49,9 +49,10 @@ def easy_observation(odom, feature):
     helper method to create Blobs to use in navigation calculations
     '''
     blob = Blob()
-    heading = math.atan2(odom.pose.pose.position.y-feature.y,
-        odom.pose.pose.position.x-feature.x)
+    heading = math.atan2(feature.y-odom.pose.pose.position.y,
+        feature.x-odom.pose.pose.position.x)
     blob.bearing = heading - quaternion_to_heading(odom.pose.pose.orientation)
+    rospy.loginfo('h | b || %f | %f' % (heading, quaternion_to_heading(odom.pose.pose.orientation),))
     blob.size = feature.red
     blob.color.r = feature.red
     blob.color.g = feature.green
@@ -68,8 +69,8 @@ class CamSim(object):
         self.num_features = 5
         self.feature_list = []
         self.feature_list.append(easy_feature(0, 0, color=(161, 77, 137,)))
-        self.feature_list.append(easy_feature(0, 15, color=(75, 55, 230,)))
-        self.feature_list.append(easy_feature(10, 0, color=(82, 120, 68,)))
+        self.feature_list.append(easy_feature(10, 0, color=(75, 55, 230,)))
+        self.feature_list.append(easy_feature(0, 15, color=(82, 120, 68,)))
         self.feature_list.append(easy_feature(10, 15, color=(224, 37, 192,)))
         while(len(self.feature_list)) < self.num_features:
             x = random.randint(-20, 35)
@@ -96,9 +97,24 @@ class CamSim(object):
         vs.header = odom.header
         vs.observes = []
 
+        o_x = odom.pose.pose.position.x
+        o_y = odom.pose.pose.position.y
+        o_h = quaternion_to_heading(odom.pose.pose.orientation)
+
+        # rospy.loginfo('odom: %f %f %f' % (o_x, o_y, o_h,))
+
         # odom.header.frame_id = '/map'
         for feature in self.feature_list:
-            vs.observes.append(easy_observation(odom, feature))
+            # rospy.loginfo('feat: %f %f' % (feature.x, feature.y,))
+            compass = math.atan2(feature.y-o_y, feature.x-o_x)
+            bearing = compass - o_h
+            # rospy.loginfo('compass: %f heading: %f bearing: %f' % (compass, o_h, bearing))
+            bob = Blob()
+            bob.bearing = bearing
+            bob.color.r = feature.red
+            bob.color.g = feature.green
+            bob.color.b = feature.blue
+            vs.observes.append(bob)
 
         rospy.loginfo('viz_core publish sensor data')
         self.feature_pub.publish(vs)
